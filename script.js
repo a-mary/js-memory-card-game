@@ -34,6 +34,8 @@ function initializeGame() {
     // startTimer();
 }
 
+// 3*3
+
 // switch (difficulty) {
 //         case 'easy':
 //             return 4; // 4 pairs, 8 cards total
@@ -44,7 +46,6 @@ function initializeGame() {
 //         default:
 //             return 4;
 //     }
-
 function getNumPairs(difficulty) {
     switch (difficulty) {
         case 'easy':
@@ -151,7 +152,31 @@ function checkForMatch(cardEl) {
             clearInterval(timer);
             isGameStarted = false;
 
-            setTimeout(() => alert(`You won in ${moves} moves and ${formatTime(timeElapsed)}!`), 500);
+            // setTimeout(() => alert(`You won in ${moves} moves and ${formatTime(timeElapsed)}!`), 500);
+
+            setTimeout(() => {
+                // win.innerHTML = `
+                // <span class="win-text">
+                //     You won!<br />
+                //     with <span class="highlight">${moves}</span> moves<br />
+                //     under <span class="highlight">${formatTime(timeElapsed)}</span> seconds
+                // </span>`
+
+
+                const winDiv = document.createElement('div');
+                winDiv.id = 'win';
+                winDiv.innerHTML = `
+                <span class="win-text">
+                    You won<br />
+                    in <span class="highlight">${moves}</span> moves<br />
+                    and <span class="highlight">${formatTime(timeElapsed)}</span> !
+                </span>
+            `
+    gameBoard.appendChild(winDiv)
+
+
+            });
+
         }
     } else {
         setTimeout(() => {
