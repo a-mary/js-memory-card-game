@@ -242,9 +242,10 @@ function checkForMatch(cardEl) {
 
         }
     } else {
-        setTimeout(() => {
-            applyShakeAnimation(card1.id, card2.id, 'mismatch', cardMismatchAnimDuration);
-        }, cardFlipRotationDuration);
+        // setTimeout(() => {
+            // applyShakeAnimation(card1.id, card2.id, 'mismatch', cardMismatchAnimDuration);
+        // }, cardFlipRotationDuration);
+
 
 
         setTimeout(() => {
@@ -258,7 +259,8 @@ function checkForMatch(cardEl) {
 
             flippedCards = [];
 
-        }, cardFlipRotationDuration + cardMismatchAnimDuration + 100);
+        // }, cardFlipRotationDuration + cardMismatchAnimDuration + 100);
+        }, cardFlipRotationDuration  + 50);
 
     }
 }
