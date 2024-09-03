@@ -31,6 +31,7 @@ let moves = 0;
 let timer;
 let timeElapsed = 0;
 let isGameStarted = false;
+let isWin = false;
 
 let cardFlipRotationDuration = 500
 let cardMismatchAnimDuration = 400
@@ -45,6 +46,7 @@ const restartButton = document.getElementById('restart');
 
 function initializeGame() {
     isGameStarted = false;
+    isWin = false;
 
     moves = 0;
     movesCounter.textContent = moves;
@@ -183,6 +185,10 @@ function renderBoard() {
 
 function handleCardClick(id, cardEl) {
 
+    if (isWin) {
+        return;
+    }
+
     if (!isGameStarted) {
         startTimer();
         isGameStarted = true;
@@ -226,6 +232,7 @@ function checkForMatch(cardEl) {
         if (matchedCards.length === cards.length) {
             clearInterval(timer);
             isGameStarted = false;
+            isWin = true;
 
             setTimeout(() => {
                 initLeftRightConfetti();
