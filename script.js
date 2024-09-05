@@ -31,7 +31,6 @@ let moves = 0;
 let timer;
 let timeElapsed = 0;
 let isGameStarted = false;
-let isWin = false;
 
 let cardFlipRotationDuration = 500
 let cardMismatchAnimDuration = 400
@@ -41,8 +40,12 @@ let cardMatchAnimDuration = 550
 const gameBoard = document.getElementById('gameBoard');
 const movesCounter = document.getElementById('moves');
 const timerDisplay = document.getElementById('timer');
-const difficultySelect = document.getElementById('difficulty');
+// const difficultySelect = document.getElementById('difficulty');
+// const difficultySelect = document.getElementById('difficulty');
+const difficultySelect = document.getElementById('difficultylvl');
 const restartButton = document.getElementById('restart');
+
+let isWin = false;
 
 function initializeGame() {
     isGameStarted = false;
@@ -54,7 +57,9 @@ function initializeGame() {
     timeElapsed = 0;
     timerDisplay.textContent = formatTime(timeElapsed);
 
-    const difficultyLevel = difficultySelect.value;
+    // const difficultyLevel = difficultySelect.value;
+    const difficultyLevel = difficultySelect.dataset.value;
+
     const numPairs = getNumPairs(difficultyLevel);
     symbols = shuffle(symbols);
     cards = shuffle([...symbols.slice(0, numPairs), ...symbols.slice(0, numPairs)]).map((symbol, index) => {
@@ -169,6 +174,13 @@ function renderBoard() {
         const cardElement = document.createElement('div');
         let coinImg = pathToImg + card.symbol + '.svg';
         cardElement.classList.add('card');
+        cardElement.classList.add('flash');
+
+        setTimeout(() => {
+            cardElement.classList.remove('flash');
+            // cardElement.classList.add('flip');
+
+        }, 310)
 
         cardElement.innerHTML = `
             <div class="front"></div>
@@ -184,7 +196,6 @@ function renderBoard() {
 }
 
 function handleCardClick(id, cardEl) {
-
     if (isWin) {
         return;
     }
@@ -247,7 +258,6 @@ function checkForMatch(cardEl) {
         // }, cardFlipRotationDuration);
 
 
-
         setTimeout(() => {
 
             card1.flipped = false;
@@ -261,6 +271,7 @@ function checkForMatch(cardEl) {
 
         // }, cardFlipRotationDuration + cardMismatchAnimDuration + 100);
         }, cardFlipRotationDuration  + 50);
+        
 
     }
 }
@@ -304,7 +315,12 @@ function formatTime(seconds) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
 }
 
-restartButton.addEventListener('click', initializeGame);
+// restartButton.addEventListener('click', initializeGame);
+restartButton.addEventListener('click', () => {
+    window.navigator.vibrate(35);
+    initializeGame();
+
+});
 
 difficultySelect.addEventListener('change', initializeGame);
 
@@ -314,4 +330,51 @@ window.addEventListener('resize', () => {
     gameBoard.style.gridTemplateColumns = `repeat(${calcBoardColumns(cards.length)}, 1fr)`;
 
 
+});
+
+
+document.querySelectorAll('.custom-select').forEach(select => {
+    const trigger = select.querySelector('.custom-select-trigger');
+    const options = select.querySelector('.custom-options');
+    const optionsItems = select.querySelectorAll('.custom-option');
+
+    const diff = trigger.querySelector('span');
+
+    // Set default option
+    // const defaultOption = select.querySelector('.custom-option[data-value="default"]');
+    const defaultOption = select.querySelector(`.custom-option[data-value="${diff.dataset.value}"]`);
+    if (defaultOption) {
+        diff.textContent = defaultOption.textContent;
+        diff.dataset.value = defaultOption.dataset.value;
+        defaultOption.classList.add('selected');
+    }
+
+    trigger.addEventListener('click', () => {
+        select.classList.toggle('open');
+    });
+
+    optionsItems.forEach(option => {
+        option.addEventListener('click', () => {
+            window.navigator.vibrate(35);
+            // window.navigator.vibrate(25);
+
+            optionsItems.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            diff.textContent = option.textContent;
+            diff.dataset.value = option.dataset.value;
+            select.classList.remove('open');
+
+            initializeGame();
+        });
+    });
+});
+
+
+// Close the custom select if clicked outside
+window.addEventListener('click', (e) => {
+    document.querySelectorAll('.custom-select').forEach(select => {
+        if (!select.contains(e.target)) {
+            select.classList.remove('open');
+        }
+    });
 });
