@@ -161,16 +161,26 @@ header .info {
     transform: rotateY(180deg);
 }
 
-.card, .back, .front, #game-board, img {
+*, *:focus {
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
+    -o-user-select: none;
     user-select: none;
     outline: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+
+::selection {
+    background: transparent;
+}
+
+::-moz-selection {
+    background: transparent;
 }
 
 
